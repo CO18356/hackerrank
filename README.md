@@ -4,38 +4,29 @@
 #include <assert.h>
 #define MAX_CHARACTERS 1005
 #define MAX_PARAGRAPHS 5
-
 struct word {
     char* data;
 };
-
 struct sentence {
     struct word* data;
-    int word_count;//denotes number of words in a sentence
-};
-
+    int word_count;//denotes number of words in a sentence};
 struct paragraph {
     struct sentence* data  ;
     int sentence_count;//denotes number of sentences in a paragraph
 };
-
 struct document {
     struct paragraph* data;
     int paragraph_count;//denotes number of paragraphs in a document
 };
-
 struct document get_document(char *text) {
     struct document *doc = malloc(sizeof(struct document));
     doc->data = NULL;
     doc->paragraph_count = 0;
+    size_t offs = 0;    size_t size = strlen(text);
 
-    size_t offs = 0;
-    size_t size = strlen(text);
-
-    while (offs < size) {
+   while (offs < size) {
         char *s = strchr(text + offs, '\n');
         size_t len = s == NULL ? size - offs : s - text - offs;
-
         char *paragraph = malloc((len + 1) * sizeof(char));
         memset(paragraph, '\0', (len + 1) * sizeof(char));
         strncpy(paragraph, text + offs, len);
@@ -43,18 +34,14 @@ struct document get_document(char *text) {
         add_paragraph(doc, paragraph);
         offs += len + 1;
     }
-
-    return *doc;
+return *doc;
 }
-
 struct word kth_word_in_mth_sentence_of_nth_paragraph(struct document doc, int k, int m, int n) {
     return doc.data[n - 1].data[m - 1].data[k - 1];
 }
-
 struct sentence kth_sentence_in_mth_paragraph(struct document doc, int k, int m) {
     return doc.data[m - 1].data[k - 1];
 }
-
 struct paragraph kth_paragraph(struct document doc, int k) {
     return doc.data[k - 1];
 }
@@ -71,14 +58,12 @@ void print_sentence(struct sentence sen) {
         }
     }
 }
-
 void print_paragraph(struct paragraph para) {
     for(int i = 0; i < para.sentence_count; i++){
         print_sentence(para.data[i]);
         printf(".");
     }
 }
-
 void print_document(struct document doc) {
     for(int i = 0; i < doc.paragraph_count; i++) {
         print_paragraph(doc.data[i]);
@@ -86,7 +71,6 @@ void print_document(struct document doc) {
             printf("\n");
     }
 }
-
 char* get_input_text() {	
     int paragraph_count;
     scanf("%d", &paragraph_count);
@@ -113,18 +97,15 @@ int main()
 
     int q;
     scanf("%d", &q);
-
     while (q--) {
         int type;
         scanf("%d", &type);
-
         if (type == 3){
             int k, m, n;
             scanf("%d %d %d", &k, &m, &n);
             struct word w = kth_word_in_mth_sentence_of_nth_paragraph(Doc, k, m, n);
             print_word(w);
         }
-
         else if (type == 2) {
             int k, m;
             scanf("%d %d", &k, &m);
